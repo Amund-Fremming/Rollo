@@ -20,7 +20,6 @@ export const startConnection = async (
 ): Promise<void> => {
   try {
     await connection.start();
-    console.info("Connection started");
   } catch (error) {
     console.error("Start connection failed", error);
   }
@@ -33,7 +32,6 @@ export const subscribe = async (
 ): Promise<void> => {
   try {
     await connection.invoke("Subscribe", userId, gameId);
-    console.info(`Player ${userId}, joined game ${userId}`);
   } catch (error) {
     console.error("Error subscribing", error);
   }
@@ -46,7 +44,6 @@ export const createGame = async (
 ): Promise<void> => {
   try {
     await connection.invoke("CreateGame", userId, gameId);
-    console.info("Created game");
   } catch (error) {
     console.error("Error creating game", error);
   }

@@ -10,28 +10,27 @@ namespace infrastructure
 
     public class GameUserList : IGameUserList
     {
-        private ConcurrentDictionary<string, List<string>> map;
+        private ConcurrentDictionary<string, ConcurrentBag<string>> map;
 
         public GameUserList()
         {
-            map = new ConcurrentDictionary<string, List<string>>();
+            map = new ConcurrentDictionary<string, ConcurrentBag<string>>();
         }
 
-        public bool AddUserToGame(string gameId, string userId)
+        public bool AddUserToGame(string userId, string gameId)
         {
-            var gameExists = map.TryGetValue(gameId, out _);
-            if (!gameExists)
+            if (!map.TryGetValue(gameId, out var userList))
+            {
                 return false;
+            }
 
-            map[gameId].Add(userId);
+            userList.Add(userId);
             return true;
         }
 
-        public bool AddGame(string gameId, string userId)
+        public bool AddGame(string userId, string gameId)
         {
             return map.TryAdd(gameId, [userId]);
         }
-
-        // Må ha noe for å fjerne game fra dette galskapet
     }
 }
