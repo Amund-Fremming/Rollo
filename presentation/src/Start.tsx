@@ -1,6 +1,13 @@
 import { HubConnection } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { createConnection, startConnection, subscribe } from "./HubClient";
 import { useStateProvider } from "./StateProvider";
 
@@ -14,9 +21,20 @@ export default function Start() {
   // const { gameState, setGameState } = useStateProvider();
 
   useEffect(() => {
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     setUserId(id);
   }, []);
+
+  function uuidv4() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
 
   const connectToHub = async () => {
     const con = createConnection();
@@ -57,9 +75,9 @@ export default function Start() {
         onChangeText={(input) => setGameId(input)}
         placeholder="Game id"
       />
-      <Pressable onPress={handleJoin}>
+      <TouchableOpacity style={styles.button} onPress={handleJoin}>
         <Text>Join</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -70,5 +88,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     width: "100%",
     height: "40%",
+  },
+
+  button: {
+    width: 200,
+    height: 100,
+    backgroundColor: "red",
   },
 });

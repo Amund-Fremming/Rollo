@@ -1,6 +1,7 @@
 import * as signalR from "@microsoft/signalr";
 
-const HUB_ENDPOINT = "spinhub";
+const HUB_ENDPOINT =
+  "rollo-frhufugpchezckfj.northeurope-01.azurewebsites.net/spinhub";
 
 // Create the connection
 export const createConnection = (): signalR.HubConnection => {

@@ -7,7 +7,7 @@ interface IStateProvider {
 }
 
 const defaultContextValue: IStateProvider = {
-  gameState: GameState.Lobby,
+  gameState: GameState.Start,
   setGameState: () => {},
 };
 
