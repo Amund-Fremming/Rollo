@@ -1,4 +1,4 @@
-using infrastructure;
+using infrastructure.src;
 
 var builder = WebApplication.CreateBuilder(args);
 

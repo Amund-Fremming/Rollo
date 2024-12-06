@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace infrastructure
+namespace infrastructure.src
 {
     public class SpinHub(IGameUserList gameUserList, ILogger<SpinHub> logger) : Hub
     {
-        private const string STATE = nameof(STATE);
+        private const string GAME_STATE = nameof(GAME_STATE);
         private const string MESSAGE = nameof(MESSAGE);
 
         private readonly IGameUserList gameUserList = gameUserList;
@@ -22,7 +22,8 @@ namespace infrastructure
 
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
             await Clients.Group(gameId).SendAsync(MESSAGE, "Player joined game.");
-            _logger.LogInformation("Joined game.");
+            await Clients.Group(gameId).SendAsync(GAME_STATE, GameState.Lobby);
+            _logger.LogInformation($"Joined game with id {gameId}");
         }
 
         public async Task CreateGame(string userId, string gameId)
@@ -36,7 +37,8 @@ namespace infrastructure
             }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
-            await Clients.Caller.SendAsync(MESSAGE, "Game created.");
+            await Clients.Group(gameId).SendAsync(GAME_STATE, GameState.Lobby);
+            await Clients.Caller.SendAsync(MESSAGE, $"Game created with id {gameId}");
         }
 
         //public async Task InitializeGame(string userId, string gameId)
