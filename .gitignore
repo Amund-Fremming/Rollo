@@ -1,0 +1,58 @@
+# Node.js / React specific (for the 'presentation' folder)
+# Ignore node_modules
+/presentation/node_modules
+
+# Ignore build output
+/presentation/build
+/presentation/dist
+
+# Ignore dependency lock files (optional if you want to always regenerate them)
+# /presentation/package-lock.json
+# /presentation/yarn.lock
+
+# Ignore log files
+/presentation/npm-debug.log
+/presentation/yarn-debug.log
+/presentation/yarn-error.log
+
+# Ignore coverage folder (for testing tools)
+/presentation/coverage
+
+# Ignore .env files (don't track environment variables)
+.presentation/.env
+
+# .NET / Visual Studio specific (for the 'infrastructure' folder)
+# Ignore Visual Studio configuration folders
+/infrastructure/.vs
+/infrastructure/.vscode
+/infrastructure/*.user
+/infrastructure/*.suo
+/infrastructure/*.userosscache
+/infrastructure/*.sln.docstates
+
+# Ignore build output for .NET
+/infrastructure/bin
+/infrastructure/obj
+/infrastructure/Debug
+/infrastructure/Release
+/infrastructure/x64
+/infrastructure/x86
+
+# Ignore compiled .NET assemblies and DLLs
+/infrastructure/*.dll
+/infrastructure/*.exe
+/infrastructure/*.pdb
+/infrastructure/*.app
+
+# Ignore NuGet packages
+/infrastructure/packages
+/infrastructure/*.nupkg
+/infrastructure/nuget.config
+
+# Ignore any configuration files for running .NET locally
+/infrastructure/*.vsconfig
+
+# Ignore the IDE config files
+/.idea/
+/.vscode/
+
