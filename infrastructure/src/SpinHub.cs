@@ -10,7 +10,7 @@ namespace infrastructure.src
         private readonly IGameUserList gameUserList = gameUserList;
         private readonly ILogger<SpinHub> _logger = logger;
 
-        public async Task Subscribe(string userId, string gameId)
+        public async Task Subscribe(string gameId, string userId)
         {
             var success = gameUserList.AddUserToGame(gameId, userId);
             if (!success)
@@ -26,7 +26,7 @@ namespace infrastructure.src
             _logger.LogInformation($"Joined game with id {gameId}");
         }
 
-        public async Task CreateGame(string userId, string gameId)
+        public async Task CreateGame(string gameId, string userId)
         {
             var success = gameUserList.AddGame(gameId, userId);
             if (!success)
