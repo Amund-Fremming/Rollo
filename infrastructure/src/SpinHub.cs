@@ -21,7 +21,7 @@ namespace infrastructure.src
             }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
-            await Clients.Group(gameId).SendAsync(MESSAGE, "Player joined game.");
+            await Clients.Group(gameId).SendAsync(MESSAGE, $"Joined game with id {gameId}");
             await Clients.Group(gameId).SendAsync(GAME_STATE, GameState.Lobby);
             _logger.LogInformation($"Joined game with id {gameId}");
         }
@@ -39,6 +39,7 @@ namespace infrastructure.src
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
             await Clients.Group(gameId).SendAsync(GAME_STATE, GameState.Lobby);
             await Clients.Caller.SendAsync(MESSAGE, $"Game created with id {gameId}");
+            _logger.LogInformation($"Joined game with id {gameId}");
         }
 
         //public async Task InitializeGame(string userId, string gameId)

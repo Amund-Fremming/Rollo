@@ -69,11 +69,11 @@ export default function Start() {
   }
 
   const handleCreate = async () => {
-    if (connection) await createGame(connection, gameId, userId);
+    if (connection) await createGame(connection, userId, gameId);
   };
 
   const handleJoin = async () => {
-    if (connection) await subscribe(connection, gameId, userId);
+    if (connection) await subscribe(connection, userId, gameId);
   };
 
   return (
