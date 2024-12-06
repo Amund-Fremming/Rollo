@@ -8,7 +8,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { createConnection, startConnection, subscribe } from "./HubClient";
+import {
+  createConnection,
+  createGame,
+  startConnection,
+  subscribe,
+} from "./HubClient";
 
 const MESSAGE = "MESSAGE";
 
@@ -35,6 +40,7 @@ export default function Start() {
       console.log("Message received from backend: ", message);
       setMessage(message);
     });
+
     console.info("listening to chanel: MESSAGE");
   };
 
@@ -50,8 +56,7 @@ export default function Start() {
   }
 
   const handleCreate = async () => {
-    // TODO
-    console.log("Created game");
+    if (connection) await createGame(connection, gameId, userId);
   };
 
   const handleJoin = async () => {

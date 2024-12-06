@@ -35,6 +35,19 @@ export const subscribe = async (
     await connection.invoke("Subscribe", userId, gameId);
     console.info(`Player ${userId}, joined game ${userId}`);
   } catch (error) {
-    console.error("Error subscribing :", error);
+    console.error("Error subscribing", error);
+  }
+};
+
+export const createGame = async (
+  connection: signalR.HubConnection,
+  userId: string,
+  gameId: string
+): Promise<void> => {
+  try {
+    await connection.invoke("CreateGame", userId, gameId);
+    console.info("Created game");
+  } catch (error) {
+    console.error("Error creating game", error);
   }
 };
