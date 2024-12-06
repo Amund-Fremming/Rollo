@@ -4,7 +4,8 @@ namespace infrastructure
 {
     public interface IGameUserList
     {
-        bool Add(string userId, string gameId);
+        bool AddUserToGame(string userId, string gameId);
+        bool AddGame(string userId, string gameId);
     }
 
     public class GameUserList : IGameUserList
@@ -16,7 +17,7 @@ namespace infrastructure
             map = new ConcurrentDictionary<string, List<string>>();
         }
 
-        public bool Add(string gameId, string userId)
+        public bool AddUserToGame(string gameId, string userId)
         {
             var gameExists = map.TryGetValue(gameId, out _);
             if (!gameExists)
@@ -26,6 +27,11 @@ namespace infrastructure
             return true;
         }
 
-        // Må ha noe for å fjerne dette galskapet
+        public bool AddGame(string gameId, string userId)
+        {
+            return map.TryAdd(gameId, [userId]);
+        }
+
+        // Må ha noe for å fjerne game fra dette galskapet
     }
 }
