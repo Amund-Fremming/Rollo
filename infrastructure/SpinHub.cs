@@ -35,6 +35,7 @@ namespace infrastructure
                 return;
             }
 
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
             await Clients.Caller.SendAsync(MESSAGE, "Game created.");
         }
 
