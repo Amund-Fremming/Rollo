@@ -17,14 +17,25 @@ namespace infrastructure
             {
                 await Clients.Caller.SendAsync(MESSAGE, "Game does not exist.");
                 _logger.LogError("Game does not exist.");
+                return;
             }
 
-            if (success)
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
+            await Clients.Group(gameId).SendAsync(MESSAGE, "Player joined game.");
+            _logger.LogInformation("Joined game.");
+        }
+
+        public async Task CreateGame(string userId, string gameId)
+        {
+            var success = gameUserList.Add(gameId, userId);
+            if (!success)
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
-                await Clients.Group(gameId).SendAsync(MESSAGE, "Joined game successfully.");
-                _logger.LogInformation("Joined game.");
+                await Clients.Caller.SendAsync(MESSAGE, "Failed to create game.");
+                _logger.LogError("Failed to create game.");
+                return;
             }
+
+            await Clients.Caller.SendAsync(MESSAGE, "Game created.");
         }
 
         //public async Task InitializeGame(string userId, string gameId)
