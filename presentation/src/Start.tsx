@@ -12,17 +12,20 @@ import {
   createConnection,
   createGame,
   startConnection,
+  stopConnection,
   subscribe,
 } from "./HubClient";
+import { GameState } from "./GameState";
+import { useStateProvider } from "./StateProvider";
 
 const MESSAGE = "MESSAGE";
-
+const GAME_STATE = "GAME_STATE";
 export default function Start() {
   const [connection, setConnection] = useState<HubConnection>();
   const [message, setMessage] = useState<string>("");
   const [gameId, setGameId] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
-  // const { gameState, setGameState } = useStateProvider();
+  const { gameState, setGameState } = useStateProvider();
 
   useEffect(() => {
     const id = uuidv4();
@@ -41,10 +44,17 @@ export default function Start() {
       setMessage(message);
     });
 
+    con.on(GAME_STATE, (gameState: GameState) => {
+      console.log("Recieved state from backend: ", gameState);
+      setGameState(gameState);
+    });
+
     con.onclose(async () => {
       console.warn("Connection lost. Attempting to reconnect...");
       await startConnection(con);
     });
+
+    return async () => await stopConnection(con);
   };
 
   function uuidv4() {

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Concurrent;
 
-namespace infrastructure
+namespace infrastructure.src
 {
     public interface IGameUserList
     {
         bool AddUserToGame(string userId, string gameId);
+
         bool AddGame(string userId, string gameId);
     }
 

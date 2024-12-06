@@ -48,3 +48,10 @@ export const createGame = async (
     console.error("Error creating game", error);
   }
 };
+
+export const stopConnection = async (connection: signalR.HubConnection) => {
+  return connection
+    .stop()
+    .then(() => console.log("Connection stopped"))
+    .catch((err) => console.error("Error while stopping connection: ", err));
+};
