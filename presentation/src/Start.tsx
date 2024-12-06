@@ -41,7 +41,10 @@ export default function Start() {
       setMessage(message);
     });
 
-    console.info("listening to chanel: MESSAGE");
+    con.onclose(async () => {
+      console.warn("Connection lost. Attempting to reconnect...");
+      await startConnection(con);
+    });
   };
 
   function uuidv4() {
@@ -71,7 +74,7 @@ export default function Start() {
         onChangeText={(input) => setGameId(input)}
         placeholder="Game id"
       />
-      <Pressable onPress={handleCreate}>
+      <Pressable style={styles.createButton} onPress={handleCreate}>
         <Text>Create</Text>
       </Pressable>
       <TextInput
@@ -79,7 +82,7 @@ export default function Start() {
         onChangeText={(input) => setGameId(input)}
         placeholder="Game id"
       />
-      <TouchableOpacity style={styles.button} onPress={handleJoin}>
+      <TouchableOpacity style={styles.joinButton} onPress={handleJoin}>
         <Text>Join</Text>
       </TouchableOpacity>
     </View>
@@ -94,9 +97,15 @@ const styles = StyleSheet.create({
     height: "40%",
   },
 
-  button: {
+  joinButton: {
     width: 200,
     height: 100,
     backgroundColor: "red",
+  },
+
+  createButton: {
+    width: 200,
+    height: 100,
+    backgroundColor: "green",
   },
 });
