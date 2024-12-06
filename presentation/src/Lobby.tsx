@@ -1,10 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function Lobby() {
+interface LobbyProps {
+  isCreator: boolean;
+  handleStartGame: () => void;
+}
+
+export default function Lobby({ isCreator, handleStartGame }: LobbyProps) {
   return (
     <View style={styles.container}>
       <Text>Lobby</Text>
       <Text>Waiting for host</Text>
+      {isCreator && (
+        <Pressable onPress={handleStartGame}>
+          <Text>StartGame</Text>
+        </Pressable>
+      )}
     </View>
   );
 }
