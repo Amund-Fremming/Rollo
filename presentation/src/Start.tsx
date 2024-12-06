@@ -46,7 +46,7 @@ export default function Start() {
 
     con.on(GAME_STATE, (gameState: GameState) => {
       console.log("Recieved state from backend: ", gameState);
-      setGameState(gameState);
+      // setGameState(gameState);
     });
 
     con.onclose(async () => {
@@ -69,17 +69,18 @@ export default function Start() {
   }
 
   const handleCreate = async () => {
-    if (connection) await createGame(connection, userId, gameId);
+    if (connection) await createGame(connection, gameId, userId);
   };
 
   const handleJoin = async () => {
-    if (connection) await subscribe(connection, userId, gameId);
+    if (connection) await subscribe(connection, gameId, userId);
   };
 
   return (
     <View style={styles.container}>
       <Text>Message: {message}</Text>
       <TextInput
+        style={styles.input}
         value={gameId}
         onChangeText={(input) => setGameId(input)}
         placeholder="Game id"
@@ -88,6 +89,7 @@ export default function Start() {
         <Text>Create</Text>
       </Pressable>
       <TextInput
+        style={styles.input}
         value={gameId}
         onChangeText={(input) => setGameId(input)}
         placeholder="Game id"
@@ -117,5 +119,10 @@ const styles = StyleSheet.create({
     width: 200,
     height: 100,
     backgroundColor: "green",
+  },
+
+  input: {
+    height: 60,
+    width: 100,
   },
 });
