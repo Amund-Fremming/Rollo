@@ -9,9 +9,8 @@ import {
   View,
 } from "react-native";
 import { createConnection, startConnection, subscribe } from "./HubClient";
-import { useStateProvider } from "./StateProvider";
 
-const IDENTIFIER = "SPIN_HUB";
+const MESSAGE = "MESSAGE";
 
 export default function Start() {
   const [connection, setConnection] = useState<HubConnection>();
@@ -23,7 +22,21 @@ export default function Start() {
   useEffect(() => {
     const id = uuidv4();
     setUserId(id);
+
+    handleHub();
   }, []);
+
+  const handleHub = async () => {
+    const con = createConnection();
+    setConnection(con);
+    await startConnection(con);
+
+    con.on(MESSAGE, (message: string) => {
+      console.log("Message received from backend: ", message);
+      setMessage(message);
+    });
+    console.info("listening to chanel: MESSAGE");
+  };
 
   function uuidv4() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -36,27 +49,13 @@ export default function Start() {
     );
   }
 
-  const connectToHub = async () => {
-    const con = createConnection();
-    setConnection(con);
-
-    await startConnection(con);
-
-    con.on(IDENTIFIER, (message: string) => {
-      console.log("Game state updated:", message);
-      setMessage(message);
-    });
-  };
-
   const handleCreate = async () => {
     // TODO
     console.log("Created game");
   };
 
   const handleJoin = async () => {
-    await connectToHub();
     if (connection) await subscribe(connection, gameId, userId);
-    console.log("Joined game");
   };
 
   return (

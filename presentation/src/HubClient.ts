@@ -1,14 +1,17 @@
 import * as signalR from "@microsoft/signalr";
 
 const HUB_ENDPOINT =
-  "rollo-frhufugpchezckfj.northeurope-01.azurewebsites.net/spinhub";
+  "https://rollo-frhufugpchezckfj.northeurope-01.azurewebsites.net/spinhub";
 
 // Create the connection
 export const createConnection = (): signalR.HubConnection => {
-  return new signalR.HubConnectionBuilder()
+  const connection = new signalR.HubConnectionBuilder()
     .withUrl(`${HUB_ENDPOINT}`)
     .configureLogging(signalR.LogLevel.Information)
     .build();
+
+  console.info("Connection created");
+  return connection;
 };
 
 // Start the connection
@@ -17,9 +20,9 @@ export const startConnection = async (
 ): Promise<void> => {
   try {
     await connection.start();
-    console.log("Connection started");
+    console.info("Connection started");
   } catch (error) {
-    console.error("GameHub Error: ", error);
+    console.error("Start connection failed", error);
   }
 };
 
@@ -30,8 +33,8 @@ export const subscribe = async (
 ): Promise<void> => {
   try {
     await connection.invoke("Subscribe", userId, gameId);
-    console.log(`Player ${userId}, joined game ${userId}`);
+    console.info(`Player ${userId}, joined game ${userId}`);
   } catch (error) {
-    console.error("Error leaving game:", error);
+    console.error("Error subscribing :", error);
   }
 };
