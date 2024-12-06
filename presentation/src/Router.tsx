@@ -1,23 +1,21 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useState } from "react";
-import Spinner from "./Spinner";
-import Splash from "./Splash";
+import { StyleSheet, View } from "react-native";
+import { StateProvider, useStateProvider } from "./StateProvider";
+import { GameState } from "./GameState";
 import Start from "./Start";
 import Lobby from "./Lobby";
+import Spinner from "./Spinner";
 
 export default function Router() {
-  const [index, setIndex] = useState<number>(0);
+  const { gameState, setGameState } = useStateProvider();
 
   return (
-    <View style={styles.container}>
-      {index == 0 && <Start />}
-      {index == 1 && <Spinner />}
-      {index == 2 && <Splash />}
-      {index == 3 && <Lobby />}
-      <Pressable onPress={() => setIndex(index + 1)}>
-        <Text>next comp</Text>
-      </Pressable>
-    </View>
+    <StateProvider>
+      <View style={styles.container}>
+        {gameState === GameState.Start && <Start />}
+        {gameState === GameState.Lobby && <Lobby />}
+        {gameState === GameState.Started && <Spinner />}
+      </View>
+    </StateProvider>
   );
 }
 
