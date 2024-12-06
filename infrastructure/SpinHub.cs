@@ -12,7 +12,7 @@ namespace infrastructure
 
         public async Task Subscribe(string userId, string gameId)
         {
-            var success = gameUserList.Add(gameId, userId);
+            var success = gameUserList.AddUserToGame(gameId, userId);
             if (!success)
             {
                 await Clients.Caller.SendAsync(MESSAGE, "Game does not exist.");
@@ -27,7 +27,7 @@ namespace infrastructure
 
         public async Task CreateGame(string userId, string gameId)
         {
-            var success = gameUserList.Add(gameId, userId);
+            var success = gameUserList.AddGame(gameId, userId);
             if (!success)
             {
                 await Clients.Caller.SendAsync(MESSAGE, "Failed to create game.");
