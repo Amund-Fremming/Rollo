@@ -7,6 +7,10 @@ namespace infrastructure.src
         private const string GAME_STATE = nameof(GAME_STATE);
         private const string MESSAGE = nameof(MESSAGE);
 
+        private const string START = nameof(START);
+        private const string LOBBY = nameof(LOBBY);
+        private const string SPINNER = nameof(SPINNER);
+
         private readonly IGameUserList gameUserList = gameUserList;
         private readonly ILogger<SpinHub> _logger = logger;
 
@@ -22,7 +26,7 @@ namespace infrastructure.src
 
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
             await Clients.Group(gameId).SendAsync(MESSAGE, $"Joined game with id {gameId}");
-            await Clients.Group(gameId).SendAsync(GAME_STATE, GameState.Lobby);
+            await Clients.Group(gameId).SendAsync(GAME_STATE, LOBBY);
             _logger.LogInformation($"Joined game with id {gameId}");
         }
 
@@ -37,7 +41,7 @@ namespace infrastructure.src
             }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
-            await Clients.Group(gameId).SendAsync(GAME_STATE, GameState.Lobby);
+            await Clients.Group(gameId).SendAsync(GAME_STATE, LOBBY);
             await Clients.Caller.SendAsync(MESSAGE, $"Game created with id {gameId}");
             _logger.LogInformation($"Joined game with id {gameId}");
         }
