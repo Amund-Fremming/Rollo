@@ -4,6 +4,7 @@ export default function Lobby() {
   return (
     <View style={styles.container}>
       <Text>Lobby</Text>
+      <Text>Waiting for host</Text>
     </View>
   );
 }
