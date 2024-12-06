@@ -1,6 +1,4 @@
-import { StyleSheet, View } from "react-native";
-import { StateProvider, useStateProvider } from "./StateProvider";
-import { GameState } from "./GameState";
+import { StyleSheet, View, Text } from "react-native";
 import Start from "./Start";
 import Lobby from "./Lobby";
 import Spinner from "./Spinner";
@@ -10,6 +8,7 @@ import {
   createConnection,
   createGame,
   startConnection,
+  startGame,
   stopConnection,
   subscribe,
 } from "./HubClient";
@@ -17,9 +16,13 @@ import {
 const MESSAGE = "MESSAGE";
 const GAME_STATE = "GAME_STATE";
 
-export default function Router() {
-  const { gameState, setGameState } = useStateProvider();
+const START = "START";
+const LOBBY = "LOBBY";
+const SPINNER = "SPINNER";
 
+export default function Router() {
+  const [gameState, setGameState] = useState<string>(START);
+  const [creator, setCreator] = useState<boolean>(false);
   const [connection, setConnection] = useState<HubConnection>();
   const [message, setMessage] = useState<string>("");
   const [gameId, setGameId] = useState<string>("");
@@ -30,7 +33,8 @@ export default function Router() {
     setUserId(id);
 
     handleHub();
-  }, []);
+    console.log("STATE IS NOW: ", gameState);
+  }, [gameState]);
 
   const handleHub = async () => {
     const con = createConnection();
@@ -52,7 +56,14 @@ export default function Router() {
       await startConnection(con);
     });
 
-    return async () => await stopConnection(con);
+    return async () => {
+      await stopConnection(con);
+      setCreator(false);
+    };
+  };
+
+  const handleStartGame = async () => {
+    if (connection) await startGame(connection, gameId);
   };
 
   function uuidv4() {
@@ -67,7 +78,10 @@ export default function Router() {
   }
 
   const handleCreate = async () => {
-    if (connection) await createGame(connection, gameId, userId);
+    if (connection) {
+      await createGame(connection, gameId, userId);
+      setCreator(true);
+    }
   };
 
   const handleJoin = async () => {
@@ -75,20 +89,21 @@ export default function Router() {
   };
 
   return (
-    <StateProvider>
-      <View style={styles.container}>
-        {gameState === GameState.Start && (
-          <Start
-            gameId={gameId}
-            setGameId={setGameId}
-            handleCreate={handleCreate}
-            handleJoin={handleJoin}
-          />
-        )}
-        {gameState === GameState.Lobby && <Lobby />}
-        {gameState === GameState.Started && <Spinner />}
-      </View>
-    </StateProvider>
+    <View style={styles.container}>
+      <Text>{message}</Text>
+      {gameState === START && (
+        <Start
+          gameId={gameId}
+          setGameId={setGameId}
+          handleCreate={handleCreate}
+          handleJoin={handleJoin}
+        />
+      )}
+      {gameState == LOBBY && (
+        <Lobby isCreator={creator} handleStartGame={handleStartGame} />
+      )}
+      {gameState == SPINNER && <Spinner isCreator={creator} />}
+    </View>
   );
 }
 

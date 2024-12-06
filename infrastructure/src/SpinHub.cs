@@ -41,19 +41,19 @@ namespace infrastructure.src
             }
 
             await Groups.AddToGroupAsync(Context.ConnectionId, gameId);
-            await Clients.Group(gameId).SendAsync(GAME_STATE, LOBBY);
             await Clients.Caller.SendAsync(MESSAGE, $"Game created with id {gameId}");
+            await Clients.Caller.SendAsync(GAME_STATE, LOBBY);
             _logger.LogInformation($"Joined game with id {gameId}");
         }
 
-        //public async Task InitializeGame(string userId, string gameId)
-        //{
-        //    await Clients.All.SendAsync("ReceiveMessage", user, message);
-        //}
+        public async Task StartGame(string gameId)
+        {
+            await Clients.Group(gameId).SendAsync(GAME_STATE, SPINNER);
+        }
 
-        //public async Task StartSpin(string userId, string gameId)
-        //{
-        //    await Clients.All.SendAsync("ReceiveMessage", user, message);
-        //}
+        public async Task StartSpinner(string gameId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
