@@ -7,6 +7,10 @@ namespace infrastructure.src
         bool AddUserToGame(string gameId, string userId);
 
         bool AddGame(string gameId, string userId);
+
+        string GetFirst(string gameId);
+
+        string GetNext(string gameId, int lastPos, out int nextPos);
     }
 
     public class GameUserList : IGameUserList
@@ -32,6 +36,14 @@ namespace infrastructure.src
         public bool AddGame(string gameId, string userId)
         {
             return map.TryAdd(gameId, [userId]);
+        }
+
+        public string GetFirst(string gameId) => map[gameId].ElementAt(0);
+
+        public string GetNext(string gameId, int lastPos, out int nextPos)
+        {
+            nextPos = (lastPos + 1) % map[gameId].Count;
+            return map[gameId].ElementAt(nextPos);
         }
     }
 }
