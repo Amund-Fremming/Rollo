@@ -54,12 +54,16 @@ namespace infrastructure.src
 
         public async Task StartSpinner(string gameId)
         {
-            var random = 5; // Make this random bigger than the group * 1.7 and less than 10
+            var random = new Random();
+            double randomCircleCount = 1.1 + (random.NextDouble() * (1.8 - 1.1));
+            int randomIterations = random.Next(1, 8);
+            var totalIterations = randomCircleCount * randomIterations;
+
             var userId = gameUserList.GetFirst(gameId);
             var lastPos = 0;
-            for (int i = 0; i < random; i++)
+            for (int i = 0; i < totalIterations; i++)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(700);
                 await Clients.Group(gameId).SendAsync(PERM_CHOOSEN, userId);
                 userId = gameUserList.GetNext(gameId, lastPos, out int nextPos);
                 lastPos = nextPos;
