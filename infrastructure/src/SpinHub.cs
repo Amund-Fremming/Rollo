@@ -54,14 +54,20 @@ namespace infrastructure.src
 
         public async Task StartSpinner(string gameId)
         {
-            var random = new Random();
-            double randomCircleCount = 1.1 + (random.NextDouble() * (1.8 - 1.1));
-            int randomIterations = random.Next(1, 8);
-            var totalIterations = randomCircleCount * randomIterations;
+            // Ved prod skal disse verdiene tweakes og brukes
+            //var random = new Random();
+            //double randomCircleCount = 1.1 + (random.NextDouble() * (1.8 - 1.1));
+            //int randomIterations = random.Next(1, 8);
+            //var totalIterations = randomCircleCount * randomIterations;
+            var success = int.TryParse(gameId, out int num);
+            if (!success)
+            {
+                num = 6;
+            }
 
             var userId = gameUserList.GetFirst(gameId);
             var lastPos = 0;
-            for (int i = 0; i < totalIterations; i++)
+            for (int i = 0; i < num; i++)
             {
                 Thread.Sleep(700);
                 await Clients.Group(gameId).SendAsync(PERM_CHOOSEN, userId);
