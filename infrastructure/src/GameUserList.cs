@@ -11,6 +11,8 @@ namespace infrastructure.src
         string GetFirst(string gameId);
 
         string GetNext(string gameId, int lastPos, out int nextPos);
+
+        int GetPlayerCount(string gameId);
     }
 
     public class GameUserList : IGameUserList
@@ -45,5 +47,7 @@ namespace infrastructure.src
             nextPos = (lastPos + 1) % map[gameId].Count;
             return map[gameId].ElementAt(nextPos);
         }
+
+        public int GetPlayerCount(string gameId) => map[gameId].Count();
     }
 }
