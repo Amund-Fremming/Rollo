@@ -16,6 +16,7 @@ import {
 
 const MESSAGE = "MESSAGE";
 const GAME_STATE = "GAME_STATE";
+const PERM_CHOOSEN = "PERM_CHOOSEN";
 
 const START = "START";
 const LOBBY = "LOBBY";
@@ -28,13 +29,15 @@ export default function Router() {
   const [message, setMessage] = useState<string>("");
   const [gameId, setGameId] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
+  const [permChoosen, setPermChoosen] = useState<string>("");
 
   useEffect(() => {
     const id = uuidv4();
     setUserId(id);
+  }, []);
 
+  useEffect(() => {
     handleHub();
-    console.log("STATE IS NOW: ", gameState);
   }, [gameState]);
 
   const handleHub = async () => {
@@ -50,6 +53,11 @@ export default function Router() {
     con.on(GAME_STATE, (gameState: string) => {
       console.log("Recieved state from backend: ", gameState);
       setGameState(gameState);
+    });
+
+    con.on(PERM_CHOOSEN, (gameId: string) => {
+      console.log("Recieved choosen player: ", gameId);
+      setPermChoosen(gameId);
     });
 
     con.onclose(async () => {
@@ -108,7 +116,12 @@ export default function Router() {
         <Lobby isCreator={creator} handleStartGame={handleStartGame} />
       )}
       {gameState == SPINNER && (
-        <Spinner isCreator={creator} handleStartSpinner={handleStartSpinner} />
+        <Spinner
+          userId={userId}
+          isCreator={creator}
+          handleStartSpinner={handleStartSpinner}
+          permChoosen={permChoosen}
+        />
       )}
     </View>
   );
