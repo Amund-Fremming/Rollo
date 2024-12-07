@@ -62,7 +62,8 @@ namespace infrastructure.src
                 Thread.Sleep(1000);
                 await Clients.Group(gameId).SendAsync(PERM_CHOOSEN, userId);
                 userId = gameUserList.GetNext(gameId, lastPos, out int nextPos);
-                lastPos = nextPos + 1;
+                lastPos = nextPos;
+                _logger.LogInformation($"User is choosen: {userId}");
             }
         }
     }
