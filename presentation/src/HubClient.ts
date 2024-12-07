@@ -67,11 +67,10 @@ export const startGame = async (
 
 export const startSpinnner = async (
   connection: signalR.HubConnection,
-  gameId: string,
-  userId: string
+  gameId: string
 ): Promise<void> => {
   try {
-    await connection.invoke("StartSpinner", gameId, userId);
+    await connection.invoke("StartSpinner", gameId);
   } catch (error) {
     console.error("Error creating game", error);
   }

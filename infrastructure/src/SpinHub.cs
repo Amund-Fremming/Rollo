@@ -10,6 +10,7 @@ namespace infrastructure.src
         private const string START = nameof(START);
         private const string LOBBY = nameof(LOBBY);
         private const string SPINNER = nameof(SPINNER);
+        private const string PERM_CHOOSEN = nameof(PERM_CHOOSEN);
 
         private readonly IGameUserList gameUserList = gameUserList;
         private readonly ILogger<SpinHub> _logger = logger;
@@ -53,7 +54,16 @@ namespace infrastructure.src
 
         public async Task StartSpinner(string gameId)
         {
-            throw new NotImplementedException();
+            var random = 5; // Make this random bigger than the group * 1.7 and less than 10
+            var userId = gameUserList.GetFirst(gameId);
+            var lastPos = 0;
+            for (int i = 0; i < random; i++)
+            {
+                Thread.Sleep(1000);
+                await Clients.Group(gameId).SendAsync(PERM_CHOOSEN, userId);
+                userId = gameUserList.GetNext(gameId, lastPos, out int nextPos);
+                lastPos = nextPos + 1;
+            }
         }
     }
 }

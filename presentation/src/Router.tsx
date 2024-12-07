@@ -9,6 +9,7 @@ import {
   createGame,
   startConnection,
   startGame,
+  startSpinnner,
   stopConnection,
   subscribe,
 } from "./HubClient";
@@ -88,6 +89,10 @@ export default function Router() {
     if (connection) await subscribe(connection, gameId, userId);
   };
 
+  const handleStartSpinner = async () => {
+    if (connection) await startSpinnner(connection, gameId);
+  };
+
   return (
     <View style={styles.container}>
       <Text>{message}</Text>
@@ -102,7 +107,9 @@ export default function Router() {
       {gameState == LOBBY && (
         <Lobby isCreator={creator} handleStartGame={handleStartGame} />
       )}
-      {gameState == SPINNER && <Spinner isCreator={creator} />}
+      {gameState == SPINNER && (
+        <Spinner isCreator={creator} handleStartSpinner={handleStartSpinner} />
+      )}
     </View>
   );
 }
