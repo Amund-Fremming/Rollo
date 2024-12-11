@@ -1,5 +1,3 @@
-import { HubConnection } from "@microsoft/signalr";
-import { useEffect, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -8,6 +6,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Colors } from "./shared/assets/Colors";
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from "./shared/assets/Dimentions";
+import { useState } from "react";
+import ErrorModal from "./shared/components/ErrorModal/ErrorModal";
 
 interface StartProps {
   gameId: string;
@@ -22,52 +28,76 @@ export default function Start({
   handleCreate,
   handleJoin,
 }: StartProps) {
+  const [errorModalVisible, setErrorModalVisible] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const handleError = (message: string) => {
+    setErrorModalVisible(true);
+    setErrorMessage(message);
+  };
+
+  const handleInput = () => {
+    if (gameId.length === 0) {
+      handleError("Game id cannot be empty");
+      return;
+    }
+
+    handleCreate();
+  };
+
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={gameId}
-        onChangeText={(input) => setGameId(input)}
-        placeholder="Game id"
+    <>
+      <ErrorModal
+        errorModalVisible={errorModalVisible}
+        setErrorModalVisible={setErrorModalVisible}
+        message={errorMessage}
       />
-      <Pressable style={styles.createButton} onPress={handleCreate}>
-        <Text>Create</Text>
-      </Pressable>
-      <TextInput
-        style={styles.input}
-        value={gameId}
-        onChangeText={(input) => setGameId(input)}
-        placeholder="Game id"
-      />
-      <TouchableOpacity style={styles.joinButton} onPress={handleJoin}>
-        <Text>Join</Text>
-      </TouchableOpacity>
-    </View>
+
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          value={gameId}
+          onChangeText={(input) => setGameId(input)}
+          placeholder="Game ID"
+        />
+        <TouchableOpacity onPress={handleInput}>
+          <Text style={styles.text}>Create</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleJoin}>
+          <Text style={styles.text}>Join</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
+    paddingBottom: "30%",
     width: "100%",
-    height: "40%",
-  },
-
-  joinButton: {
-    width: 200,
-    height: 100,
-    backgroundColor: "red",
-  },
-
-  createButton: {
-    width: 200,
-    height: 100,
-    backgroundColor: "green",
+    height: "110%",
+    backgroundColor: Colors.Dark,
   },
 
   input: {
-    height: 60,
-    width: 100,
+    marginBottom: "8%",
+    height: "10%",
+    width: "80%",
+    borderRadius: moderateScale(15),
+    backgroundColor: Colors.Cream,
+    fontFamily: "Shrikhand",
+    fontSize: moderateScale(30),
+    textAlign: "center",
+    paddingTop: "2%",
+  },
+
+  text: {
+    width: "100%",
+    fontSize: moderateScale(90),
+    fontFamily: "Shrikhand",
+    color: Colors.Purple,
+    lineHeight: verticalScale(110),
   },
 });

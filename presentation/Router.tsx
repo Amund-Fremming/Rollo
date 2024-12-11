@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text } from "react-native";
-import Start from "./Start";
-import Lobby from "./Lobby";
-import Spinner from "./Spinner";
+import Start from "./src/Start";
+import Lobby from "./src/Lobby";
+import Spinner from "./src/Spinner";
 import { HubConnection } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
 import {
@@ -12,7 +12,9 @@ import {
   startSpinnner,
   stopConnection,
   subscribe,
-} from "./HubClient";
+} from "./src/HubClient";
+import { useFonts } from "expo-font";
+import Splash from "./src/Splash";
 
 const MESSAGE = "MESSAGE";
 const GAME_STATE = "GAME_STATE";
@@ -30,6 +32,20 @@ export default function Router() {
   const [gameId, setGameId] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
   const [permChoosen, setPermChoosen] = useState<string>("");
+  const [loadSplash, setLoadSplash] = useState<boolean>(true);
+  const [loaded] = useFonts({
+    Shrikhand: require("./src/shared/assets/Shrikhand-Regular.ttf"),
+  });
+
+  useEffect(() => {
+    if (loaded) {
+      const timer = setTimeout(() => {
+        setLoadSplash(false);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loaded]);
 
   useEffect(() => {
     const id = uuidv4();
@@ -101,9 +117,12 @@ export default function Router() {
     if (connection) await startSpinnner(connection, gameId);
   };
 
+  if (loadSplash) {
+    return <Splash />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>{message}</Text>
+    <>
       {gameState === START && (
         <Start
           gameId={gameId}
@@ -123,16 +142,6 @@ export default function Router() {
           permChoosen={permChoosen}
         />
       )}
-    </View>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
-  },
-});

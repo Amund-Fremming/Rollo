@@ -23,9 +23,9 @@ export default function Spinner({
 
   useEffect(() => {
     if (permChoosen == userId) {
-      setBackgroundColor("red");
+      setBackgroundColor("#00AE49");
     } else {
-      setBackgroundColor("green");
+      setBackgroundColor("#FB2946");
     }
   }, [permChoosen]);
 
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     width: "100%",
-    height: "40%",
+    height: "100%",
   },
 });

@@ -1,3 +1,3 @@
 import { registerRootComponent } from "expo";
-import Router from "./src/Router";
+import Router from "./Router";
 registerRootComponent(Router);
